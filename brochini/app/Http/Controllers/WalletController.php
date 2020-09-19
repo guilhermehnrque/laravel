@@ -20,8 +20,9 @@ class WalletController extends Controller
 
     public function update(WalletUpdateRequest $request, $id)
     {
-        $wallet = new Wallet;
         $validated = $request->validated();
+        
+        $wallet = new Wallet;
         if (!$id == null) {
             $walletResponse = $wallet->checkIfWalletExists($id, $request->user_id);
 
