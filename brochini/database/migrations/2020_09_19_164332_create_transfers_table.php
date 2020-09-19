@@ -21,8 +21,8 @@ class CreateTransfersTable extends Migration
             $table->unsignedBigInteger('wallet_target');
             $table->timestamps();
 
-            $table->foreign('wallet_source')->references('id')->on('wallets');
-            $table->foreign('wallet_target')->references('id')->on('wallets');
+            $table->foreign('wallet_source')->references('id')->on('wallets')->onDelete('cascade');
+            $table->foreign('wallet_target')->references('id')->on('wallets')->onDelete('cascade');
         });
     }
 

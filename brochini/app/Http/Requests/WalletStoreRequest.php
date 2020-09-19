@@ -13,7 +13,7 @@ class WalletStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,19 @@ class WalletStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'current_balance' =>  'required',
+            'status'  => 'required',
+            'user_id'     => 'required|unique:wallets'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'current_balance.required' => 'Current balance is required!',
+            'status.required' => 'Status is required!',
+            'user_id.required' => 'User id is required!',
+            'user_id.unique' => 'User id has already been used'
         ];
     }
 }
