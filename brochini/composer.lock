@@ -4,8 +4,58 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d0c0458cd7bf0aa562d0e4f09f6d9d59",
+    "content-hash": "f4e32b06a0cc5e0d9c83b228da2ce074",
     "packages": [
+        {
+            "name": "aschmelyun/larametrics",
+            "version": "v1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aschmelyun/larametrics.git",
+                "reference": "b7966907f30436dccc7270db997a49663b454b86"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aschmelyun/larametrics/zipball/b7966907f30436dccc7270db997a49663b454b86",
+                "reference": "b7966907f30436dccc7270db997a49663b454b86",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.5",
+                "php": "^7.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "~3.4.0|~3.6.0|~3.7.0|~3.8.0|^4.0",
+                "phpunit/phpunit": "^6.0|^7.0|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Aschmelyun\\Larametrics\\LarametricsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Aschmelyun\\Larametrics\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andrew Schmelyun",
+                    "email": "me@aschmelyun.com",
+                    "homepage": "https://aschmelyun.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A self-hosted metrics and notifications platform for Laravel apps",
+            "time": "2020-01-23T18:30:37+00:00"
+        },
         {
             "name": "asm89/stack-cors",
             "version": "v2.0.1",

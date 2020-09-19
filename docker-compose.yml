@@ -47,3 +47,25 @@ services:
             - "3000:3000"
         networks: 
             - laravel
+    
+    composer:
+        image: composer:latest
+        container_name: composer
+        volumes:
+            - ./brochini:/var/www/html
+        working_dir: /var/www/html
+        networks: 
+            - laravel
+    artisan:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: artisan
+        volumes: 
+            - ./brochini:/var/www/html
+        depends_on: 
+            - mysql
+        working_dir: /var/wwww/html
+        entrypoint: ['/var/www/html/artisan']
+        networks: 
+            - laravel
