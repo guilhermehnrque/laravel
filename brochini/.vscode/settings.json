@@ -1,0 +1,24 @@
+{
+    "git.enabled": true,
+    "files.exclude": {
+      "node_modules": true,
+      ".vscode": false,
+      ".gitignore": true,
+      "package.json": true,
+      "package-lock.json": true,
+      "public": true,
+      ".env.example": true,
+      ".gitattributes": true,
+      ".styleci.yml": true,
+      "artisan": true,
+      "composer.json": true,
+      "composer.lock": true,
+      "phpunit.xml": true,
+      "server.php": true,
+      "webpack.mix.js": true,
+      "bootstrap": true,
+      "resources": true,
+      "vendor": true,
+      ".editorconfig": true
+    }
+  }

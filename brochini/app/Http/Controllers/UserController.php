@@ -21,7 +21,7 @@ class UserController extends Controller
     {
         $validated = $request->validated();
         $response = User::create($request->all());
-        return response()->json(['message' => 'User created', 'code' => $response->id], 201);
+        return response()->json(['message' => 'User created', 'use_code' => $response->id], 201);
     }
 
     public function edit($id)

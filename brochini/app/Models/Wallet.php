@@ -23,4 +23,8 @@ class Wallet extends Model
     public function tranfersTarget(){
         return $this->hasMany('App\Models\Transfer', 'wallet_target', 'id');
     }
+
+    public function checkIfWalletExists($wallet_id, $user_id){
+        return $this->where('id', $wallet_id)->where('user_id', $user_id)->first();
+    }
 }

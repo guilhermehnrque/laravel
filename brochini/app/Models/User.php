@@ -16,4 +16,10 @@ class User extends Model
     {
         return $this->hasOne('App\Models\Wallet', 'user_id', 'id');
     }
+
+    // Password hash
+    public function setPasswordAttribute($value){
+        $this->attributes['password'] = bcrypt($value);
+    }
+
 }

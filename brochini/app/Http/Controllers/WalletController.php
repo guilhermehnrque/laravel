@@ -2,37 +2,41 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\WalletStoreRequest;
+use App\Http\Requests\Wallet\WalletStoreRequest;
+use App\Http\Requests\Wallet\WalletUpdateRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\QueryException;
 
 use App\Models\Wallet;
 
 class WalletController extends Controller
 {
+
     public function store(WalletStoreRequest $request)
     {
         $validated = $request->validated();
         $response = Wallet::create($request->all());
-        return response()->json(['message' => 'Wallet created', 'code' => $response->id], 201);
+        return response()->json(['message' => 'Wallet created', 'wallet_code' => $response->id], 201);
     }
 
-    public function update(Request $request, $id)
+    public function update(WalletUpdateRequest $request, $id)
     {
-        $walletObject = [
-            'income' => $request->income,
-            'user_id' => $request->user_id
-        ];
+        $wallet = new Wallet;
+        $validated = $request->validated();
+        if (!$id == null) {
+            $walletResponse = $wallet->checkIfWalletExists($id, $request->user_id);
 
-        try {
-            $wallet = Wallet::find($id);
-            $wallet->current_balance = $walletObject['income'];
-            $wallet->save();
+            if ($walletResponse == null) {
+                return response()->json(['status' => 'error', 'message' => 'Invalid wallet'], 201);
+            }
 
-            return response()->json(['message' => 'Income added', 'Actual Balance' => $wallet->current_balance], 201);
-        } catch (QueryExpeciton $e) {
-            dd($e->getMessage());
+            $new_balance = $walletResponse->current_balance + $request->income;
+            $walletResponse->current_balance = $new_balance;
+            $walletResponse->save();
+            return response()->json(['message' => 'Income added', 'actual_balance' => $walletResponse->current_balance], 201);
         }
+    }
+
+    public function withdraw(Request $request, $id)
+    {
     }
 }
