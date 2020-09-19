@@ -24,7 +24,20 @@ class TransferStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'value'         =>  'required',
+            'status'        => 'required',
+            'wallet_source' => 'required',
+            'wallet_target' => 'required'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'value.required' => 'Current balance is required!',
+            'status.required' => 'Status is required!',
+            'wallet_source.required' => 'Wallet source is required!',
+            'wallet_target.required' => 'Wallet target is required'
         ];
     }
 }
