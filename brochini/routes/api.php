@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\TransferController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -8,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 // Controllers
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WalletController;
+use App\Http\Controllers\TransferController;
 
 // User routes
 Route::get('/', function () {
@@ -26,6 +26,6 @@ Route::group(['prefix' => 'wallet'], function () {
 });
 
 // Transfer
-Route::group(['prefix' => 'transfer', function(){
+Route::group(['prefix' => 'transfer'], function(){
     Route::post('to', 'TransferController@store');
-}]);
+});

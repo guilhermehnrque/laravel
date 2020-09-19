@@ -9,13 +9,6 @@ use App\Models\Transfer;
 
 class TransferController extends Controller
 {
-    // public function store(WalletStoreRequest $request)
-    // {
-    //     $validated = $request->validated();
-    //     $response = Wallet::create($request->all());
-    //     return response()->json(['message' => 'Wallet created', 'wallet_code' => $response->id], 201);
-    // }
-
     public function store(TransferStoreRequest $request)
     {
         $validated = $request->validated();
