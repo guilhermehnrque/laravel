@@ -13,7 +13,7 @@ class Wallet extends Model
     ];
 
     public function user(){
-        return $this->belongsTo('App\Models\Users', 'user_id', 'id');
+        return $this->belongsTo('App\Models\User', 'user_id', 'id');
     }
 
     public function tranfersSource(){
@@ -27,4 +27,15 @@ class Wallet extends Model
     public function checkIfWalletExists($wallet_id, $user_id){
         return $this->where('id', $wallet_id)->where('user_id', $user_id)->first();
     }
+
+    // public updateSourceWallet($wallet_id, $value){
+    //     $source = $this->where('id', $wallet_id)->first();
+    //     $source->current_balance = $source->current_balance - $value;
+    //     $source->save();
+    //     return $source;
+    // }
+
+    // public updateTargetWallet(){
+        
+    // }
 }

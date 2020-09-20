@@ -19,13 +19,11 @@ Route::group(['prefix' => 'user'], function () {
     Route::post('create', 'UserController@store');
 });
 
-// Wallters
+// Wallets
 Route::group(['prefix' => 'wallet'], function () {
     Route::post('create', 'WalletController@store');
     Route::patch('income/{id}', 'WalletController@update');
 });
 
-// Transfer
-Route::group(['prefix' => 'transfer'], function(){
-    Route::post('to', 'TransferController@store');
-});
+// Transaction
+Route::post('/transaction', 'TransferController@store');
