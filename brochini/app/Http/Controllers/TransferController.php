@@ -11,19 +11,37 @@ use App\Models\Wallet;
 
 class TransferController extends Controller
 {
+    public function __construct(Wallet $wallet)
+    {
+        $this->wallet = $wallet;
+    }
+
     public function store(TransferStoreRequest $request)
     {
-        // Validando as informações
+        // Validação dos campos
         $validated = $request->validated();
-        $user = Wallet::find($request->payer)->user;
 
-        if ($user->type == 'lojista') {
+        $walletPayer = $this->wallet->walletExists($request->payer);
+        $walletPayee = $this->wallet->walletExists($request->payee);
+
+        if ($walletPayer == null) {
+            return response()->json(['generic' => 'Payer wallet invalid'], 422);
+        }
+        if ($walletPayee == null) {
+            return response()->json(['generic' => 'Payee wallet invalid'], 422);
+        }
+
+        $walletPayerType = $this->wallet->getTypeWallet($request->payer);
+        if ($walletPayerType == 'lojista') {
             return response()->json(['message' => 'You can only receive transactions'], 422);
         }
 
         $value = $request->value;
-        $payer = Wallet::find($request->payer);
+        $payer = $this->wallet->getWalletAndUser($request->payer);
+        $payee = $this->wallet->getWalletAndUser($request->payee);
+
         $payerCurrentBalance = $payer->current_balance;
+        $payeeCurrentBalance = $payee->current_balance;
 
         if ($value > $payerCurrentBalance) {
             return response()->json(['message' => "Higher value than expected"], 422);
@@ -32,25 +50,24 @@ class TransferController extends Controller
         }
 
         $payer->current_balance = ($payerCurrentBalance - $value);
-
-        $payee = Wallet::find($request->payee);
-        $payeeCurrentBalance = $payee->current_balance;
         $payee->current_balance = ($payeeCurrentBalance + $value);
 
         $urlValidation = 'https://run.mocky.io/v3/8fafdd68-a090-496f-8c9a-3442cf30dae6';
         $response = Http::get($urlValidation);
 
         if ($response->failed()) {
-            $request->status = 'rejected';
-            $response = Transfer::create($request->all());
+            $data = $request->all();
+            $data['status'] = 'rejected';
+            $response = Transfer::create($data);
             return response()->json(['guzzlet' => $response], 422);
         }
 
-        $request->status = 'done';
-        $response = Transfer::create($request->all());
         $payer->save();
         $payee->save();
-        return response()->json(['message' => 'Transaction OK', 'data' => $response], 201);
+        $data = $request->all();
+        $data['status'] = 'approved';
+        $response = Transfer::create($data);
 
+        return response()->json(['message' => 'Transaction OK', 'data' => $response], 201);
     }
 }
