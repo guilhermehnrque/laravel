@@ -16,29 +16,37 @@ class TransferController extends Controller
         $this->wallet = $wallet;
     }
 
+    private function verifyIsWalletIsNull($wallet, $message)
+    {
+        if ($wallet == null || $wallet == false) {
+            return response()->json(['generic' => $message . ' wallet invalid'], 422);
+        }
+    }
+
     public function store(TransferStoreRequest $request)
     {
-        // Validação dos campos
         $validated = $request->validated();
 
         $walletPayer = $this->wallet->walletExists($request->payer);
         $walletPayee = $this->wallet->walletExists($request->payee);
 
-        if ($walletPayer == null) {
+        if ($walletPayer == null || $walletPayer == false) {
             return response()->json(['generic' => 'Payer wallet invalid'], 422);
         }
-        if ($walletPayee == null) {
+
+        if ($walletPayee == null || $walletPayee == false) {
             return response()->json(['generic' => 'Payee wallet invalid'], 422);
         }
 
-        $walletPayerType = $this->wallet->getTypeWallet($request->payer);
-        if ($walletPayerType == 'lojista') {
+        $walletPayerType = $this->wallet->getWalletUser($request->payer);
+
+        if ($walletPayerType['type'] == 'lojista') {
             return response()->json(['message' => 'You can only receive transactions'], 422);
         }
 
         $value = $request->value;
-        $payer = $this->wallet->getWalletAndUser($request->payer);
-        $payee = $this->wallet->getWalletAndUser($request->payee);
+        $payer = $this->wallet->getWallet($request->payer);
+        $payee = $this->wallet->getWallet($request->payee);
 
         $payerCurrentBalance = $payer->current_balance;
         $payeeCurrentBalance = $payee->current_balance;

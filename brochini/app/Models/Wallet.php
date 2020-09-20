@@ -32,15 +32,15 @@ class Wallet extends Model
         return $this->where('id', $wallet_id)->where('user_id', $user_id)->first();
     }
 
-
-    public function getTypeWallet($id)
+    public function getWalletUser($id)
     {
-        return $this->find($id)->user;
+        $wallet = $this->find($id);
+        return $wallet->user;
     }
 
-    public function getWalletAndUser($id)
+    public function getWallet($id)
     {
-        return $this->find($id)->user;
+        return $this->find($id);
     }
 
     public function walletExists($wallet_id)
