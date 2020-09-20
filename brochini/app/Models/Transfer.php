@@ -9,7 +9,7 @@ class Transfer extends Model
     protected $table = 'tranfers';
 
     protected $fillable = [
-       'value', 'status', 'wallet_source', 'wallet_target'
+       'value', 'status', 'payer', 'payee'
     ];
  
     public function user(){
