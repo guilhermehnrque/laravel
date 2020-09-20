@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Http;
 use App\Http\Requests\Transfer\TransferStoreRequest;
 use Illuminate\Http\Request;
 
@@ -20,11 +21,9 @@ class TransferController extends Controller
             return response()->json(['message' => 'You can only receive transactions'], 422);
         }
 
-        // Se o usuário for comun - prosseguir
-        // Verificar se o valor informado ultrapassa o limite existente na carteira
         $value = $request->value;
-        $wallet = Wallet::find($request->payer);
-        $payerCurrentBalance = $wallet->current_balance;
+        $payer = Wallet::find($request->payer);
+        $payerCurrentBalance = $payer->current_balance;
 
         if($value > $payerCurrentBalance){
             return response()->json(['message' => "Higher value than expected"], 422);
@@ -32,16 +31,31 @@ class TransferController extends Controller
             return response()->json(['message' => "More than you have"], 422);
         }
 
-        $wallet->current_balance = ($payerCurrentBalance - $value);
-        $wallet->save();
+        $payer->current_balance = ($payerCurrentBalance - $value);
+        
 
-        // Adicionando o valor na carteira de quem está recebendo o pagamento
+    
         $payee = Wallet::find($request->payee);
         $payeeCurrentBalance = $payee->current_balance;
         $payee->current_balance = ($payeeCurrentBalance + $value);
-        $payee->save();
         
-        return response()->json(['message' => 'Transaction OK', 'dsadas' => $payee], 201);
+        $urlValidation = 'https://run.mocky.io/v3/8fafdd68-a090-496f-8c9a-3442cf30dae6';
+        $response = Http::get($urlValidation);
+
+        if(!$response->failed()){
+            return response()->json(['guzzlet' =>$response->body()], 201);
+        }
+
+        $transacao = 'ok';
+        if($transacao == 'ok'){
+            $payer->save();
+            $payee->save();
+            
+            $response = Transfer::create($request->all());
+            return response()->json(['message' => 'Transaction OK', 'dsadas' => $transacao], 201);
+        }else{
+            return response()->json(['message' => 'Transaction not authorized', 'dsadas' => $transacao], 422);
+        }
         
         // $response = Transfer::create($request->all());
         // return response()->json(['message' => 'Transfer requistion created', 'transfer_code' => $response->id], 201);
