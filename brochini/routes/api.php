@@ -23,6 +23,7 @@ Route::group(['prefix' => 'user'], function () {
 Route::group(['prefix' => 'wallet'], function () {
     Route::post('create', 'WalletController@store');
     Route::patch('income/{id}', 'WalletController@update');
+    Route::get('balance/{id}', 'WalletController@show');
 });
 
 // Transaction

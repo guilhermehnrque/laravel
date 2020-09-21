@@ -27,15 +27,20 @@ class Wallet extends Model
         return $this->hasMany('App\Models\Transfer', 'payee', 'id');
     }
 
-    public function checkIfWalletExists($wallet_id, $user_id)
+    public function ifWalletAndUser($wallet_id, $user_id)
     {
         return $this->where('id', $wallet_id)->where('user_id', $user_id)->first();
     }
 
-    public function getWalletUser($id)
+    public function getWalletUserData($id)
     {
         $wallet = $this->find($id);
         return $wallet->user;
+    }
+
+    public function ifWalletExists($wallet_id)
+    {
+        return $this->where('id', $wallet_id)->exists();
     }
 
     public function getWallet($id)
@@ -43,20 +48,4 @@ class Wallet extends Model
         return $this->find($id);
     }
 
-    public function walletExists($wallet_id)
-    {
-        return $this->where('id', $wallet_id)->exists();
-    }
-
-
-    // public updateSourceWallet($wallet_id, $value){
-    //     $source = $this->where('id', $wallet_id)->first();
-    //     $source->current_balance = $source->current_balance - $value;
-    //     $source->save();
-    //     return $source;
-    // }
-
-    // public updateTargetWallet(){
-
-    // }
 }

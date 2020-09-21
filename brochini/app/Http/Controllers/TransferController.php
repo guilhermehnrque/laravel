@@ -16,29 +16,19 @@ class TransferController extends Controller
         $this->wallet = $wallet;
     }
 
-    private function verifyIsWalletIsNull($wallet, $message)
-    {
-        if ($wallet == null || $wallet == false) {
-            return response()->json(['generic' => $message . ' wallet invalid'], 422);
-        }
-    }
-
     public function store(TransferStoreRequest $request)
     {
         $validated = $request->validated();
 
-        $walletPayer = $this->wallet->walletExists($request->payer);
-        $walletPayee = $this->wallet->walletExists($request->payee);
-
-        if ($walletPayer == null || $walletPayer == false) {
+        if ($this->wallet->ifWalletExists($request->payer) == null || $this->wallet->ifWalletExists($request->payer) == false) {
             return response()->json(['generic' => 'Payer wallet invalid'], 422);
         }
 
-        if ($walletPayee == null || $walletPayee == false) {
+        if ($this->wallet->ifWalletExists($request->payee) == null || $this->wallet->ifWalletExists($request->payee) == false) {
             return response()->json(['generic' => 'Payee wallet invalid'], 422);
         }
 
-        $walletPayerType = $this->wallet->getWalletUser($request->payer);
+        $walletPayerType = $this->wallet->getWalletUserData($request->payer);
 
         if ($walletPayerType['type'] == 'lojista') {
             return response()->json(['message' => 'You can only receive transactions'], 422);
@@ -60,8 +50,7 @@ class TransferController extends Controller
         $payer->current_balance = ($payerCurrentBalance - $value);
         $payee->current_balance = ($payeeCurrentBalance + $value);
 
-        $urlValidation = 'https://run.mocky.io/v3/8fafdd68-a090-496f-8c9a-3442cf30dae6';
-        $response = Http::get($urlValidation);
+        $response = Http::get('https://run.mocky.io/v3/8fafdd68-a090-496f-8c9a-3442cf30dae6');
 
         if ($response->failed()) {
             $data = $request->all();
