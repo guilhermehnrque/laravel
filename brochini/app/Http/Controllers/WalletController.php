@@ -31,10 +31,6 @@ class WalletController extends Controller
 
         $walletResponse = $this->wallet->ifWalletAndUser($id, $request->user_id);
 
-        
-        return response($walletResponse);
-
-
         if ($walletResponse == null) return response()->json(['status' => 'error', 'message' => 'Invalid wallet'], 201);
 
         $new_balance = $walletResponse->current_balance + $request->income;
