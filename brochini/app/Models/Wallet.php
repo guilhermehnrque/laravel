@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Wallet extends Model
 {
@@ -29,7 +30,11 @@ class Wallet extends Model
 
     public function ifWalletAndUser($wallet_id, $user_id)
     {
-        return $this->where('id', $wallet_id)->where('user_id', $user_id)->first();
+        try {
+            return $this->where('id', $wallet_id)->where('user_id', $user_id)->firstOrFail();
+        } catch (\Exception $e) {
+            throw new ModelNotFoundException('NOT FOUND USER');
+        }
     }
 
     public function getWalletUserData($id)
@@ -47,5 +52,4 @@ class Wallet extends Model
     {
         return $this->find($id);
     }
-
 }

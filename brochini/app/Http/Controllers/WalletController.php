@@ -31,16 +31,20 @@ class WalletController extends Controller
 
         $walletResponse = $this->wallet->ifWalletAndUser($id, $request->user_id);
 
+        
+        return response($walletResponse);
+
+
         if ($walletResponse == null) return response()->json(['status' => 'error', 'message' => 'Invalid wallet'], 201);
 
         $new_balance = $walletResponse->current_balance + $request->income;
         $walletResponse->current_balance = $new_balance;
         $walletResponse->save();
-
+        
         return response()->json(['message' => 'Income added', 'actual_balance' => $walletResponse->current_balance], 201);
     }
 
-    public function show($id)
+    public function withdraw(Request $request, $id)
     {
     }
 }
