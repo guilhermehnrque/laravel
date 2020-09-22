@@ -2,12 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Http;
 use App\Http\Requests\Transfer\TransferStoreRequest;
-use Illuminate\Http\Request;
-
-use App\Models\Transfer;
-use App\Models\Wallet;
 
 use App\Services\TransferService;
 use App\Services\WalletService;
