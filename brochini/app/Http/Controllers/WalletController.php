@@ -20,29 +20,17 @@ class WalletController extends Controller
 
     public function store(WalletStoreRequest $request)
     {
-        //$validated = $request->validated();
-        //return response()->json(['message' => 'Wallet created', 'wallet_code' => $request->all()], 201);
+        $validated = $request->validated();
         $response = $this->walletService->register($request);
-        
         return response()->json(['message' => 'Wallet created', 'wallet_code' => $response->id], 201);
     }
 
     public function update(WalletUpdateRequest $request, $id)
     {
         $validated = $request->validated();
-
-        //if ($id == null) return response()->json(['status' => 'error', 'message' => 'Invalid user id'], 201);
-
-        $walletResponse = $this->wallet->isWalletUserValid($id, $request->user_id);
-
-        $new_balance = $walletResponse->current_balance + $request->income;
-        $walletResponse->current_balance = $new_balance;
-        $walletResponse->save();
-        
-        return response()->json(['message' => 'Income added', 'actual_balance' => $walletResponse->current_balance], 201);
+        $this->walletService->checkWallet($request, $id);
+        $wallet_response = $this->walletService->deposit($request, $id);
+        return response()->json(['message' => 'Income added', 'New balance' => $wallet_response ->current_balance], 201);
     }
 
-    public function withdraw(Request $request, $id)
-    {
-    }
 }
