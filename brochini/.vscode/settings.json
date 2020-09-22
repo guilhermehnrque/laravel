@@ -19,6 +19,7 @@
       "bootstrap": true,
       "resources": true,
       "vendor": true,
-      ".editorconfig": true
+      ".editorconfig": true,
+      "config": true,
     }
   }

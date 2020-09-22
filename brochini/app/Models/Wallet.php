@@ -28,12 +28,28 @@ class Wallet extends Model
         return $this->hasMany('App\Models\Transfer', 'payee', 'id');
     }
 
-    public function ifWalletAndUser($wallet_id, $user_id)
+    public function isWalletUserValid($wallet_id, $user_id)
     {
         try {
             return $this->where('id', $wallet_id)->where('user_id', $user_id)->firstOrFail();
         } catch (\Exception $e) {
-            throw new ModelNotFoundException('NOT FOUND USER');
+            throw new ModelNotFoundException('Invalid wallet');
+        }
+    }
+
+    public function ifWalletIsLojista($id)
+    {
+
+        $wallet = $this->find($id);
+        return $wallet->user;
+    }
+
+    public function ifWalletExists($wallet_id, $message)
+    {
+        try {
+            return $this->where('id', $wallet_id)->firstOrFail();
+        } catch (\Exception $e) {
+            throw new ModelNotFoundException($message);
         }
     }
 
@@ -41,11 +57,6 @@ class Wallet extends Model
     {
         $wallet = $this->find($id);
         return $wallet->user;
-    }
-
-    public function ifWalletExists($wallet_id)
-    {
-        return $this->where('id', $wallet_id)->exists();
     }
 
     public function getWallet($id)

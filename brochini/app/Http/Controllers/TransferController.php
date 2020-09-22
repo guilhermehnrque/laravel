@@ -20,19 +20,13 @@ class TransferController extends Controller
     {
         $validated = $request->validated();
 
-        if ($this->wallet->ifWalletExists($request->payer) == null || $this->wallet->ifWalletExists($request->payer) == false) {
-            return response()->json(['generic' => 'Payer wallet invalid'], 422);
-        }
+        $this->wallet->ifWalletExists($request->payer, 'Payer wallet invalid'); 
+        $this->wallet->ifWalletExists($request->payee, 'Payee wallet invalid');
 
-        if ($this->wallet->ifWalletExists($request->payee) == null || $this->wallet->ifWalletExists($request->payee) == false) {
-            return response()->json(['generic' => 'Payee wallet invalid'], 422);
-        }
+        $walletExists = $this->wallet->ifWalletIsLojista($request->payer);
 
-        $walletPayerType = $this->wallet->getWalletUserData($request->payer);
-
-        if ($walletPayerType['type'] == 'lojista') {
-            return response()->json(['message' => 'You can only receive transactions'], 422);
-        }
+        if ($walletExists['type'] == 'lojista') return response()->json(['message' => "You can only receive transactions"], 422);
+     
 
         $value = $request->value;
         $payer = $this->wallet->getWallet($request->payer);
@@ -56,7 +50,7 @@ class TransferController extends Controller
             $data = $request->all();
             $data['status'] = 'rejected';
             $response = Transfer::create($data);
-            return response()->json(['guzzlet' => $response], 422);
+            return response()->json(['message' => $response], 422);
         }
 
         $payer->save();
@@ -65,6 +59,6 @@ class TransferController extends Controller
         $data['status'] = 'approved';
         $response = Transfer::create($data);
 
-        return response()->json(['message' => 'Transaction OK', 'data' => $response], 201);
+        return response()->json(['message' => $response], 201);
     }
 }

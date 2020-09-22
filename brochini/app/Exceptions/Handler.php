@@ -27,18 +27,18 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
-    // /**
-    //  * Report or log an exception.
-    //  *
-    //  * @param  \Throwable  $exception
-    //  * @return void
-    //  *
-    //  * @throws \Throwable
-    //  */
-    // public function report(Throwable $exception)
-    // {
-    //     parent::report($exception);
-    // }
+    /**
+     * Report or log an exception.
+     *
+     * @param  \Throwable  $exception
+     * @return void
+     *
+     * @throws \Throwable
+     */
+    public function report(Throwable $exception)
+    {
+        parent::report($exception);
+    }
 
     /**
      * Render an exception into an HTTP response.
@@ -53,8 +53,7 @@ class Handler extends ExceptionHandler
     {
         if ($exception instanceof ModelNotFoundException) {
             return response()->json([
-                'error' => 'Entry for ' . str_replace('App\\', '', $exception->getModel()) . ' not found'
-            ], 404);
+                'error' => '' . str_replace('App\\', '', $exception->getMessage())], 422);
         }
 
         return parent::render($request, $exception);
