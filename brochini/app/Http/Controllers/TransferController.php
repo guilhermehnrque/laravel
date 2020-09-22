@@ -9,56 +9,28 @@ use Illuminate\Http\Request;
 use App\Models\Transfer;
 use App\Models\Wallet;
 
+use App\Services\TransferService;
+use App\Services\WalletService;
+
 class TransferController extends Controller
 {
-    public function __construct(Wallet $wallet)
+    protected $walletService;
+    protected $transferService;
+
+    public function __construct(TransferService $transferService, WalletService $walletService)
     {
-        $this->wallet = $wallet;
+        $this->transferService = $transferService;
+        $this->walletService = $walletService;
     }
 
     public function store(TransferStoreRequest $request)
     {
         $validated = $request->validated();
 
-        $this->wallet->ifWalletExists($request->payer, 'Payer wallet invalid'); 
-        $this->wallet->ifWalletExists($request->payee, 'Payee wallet invalid');
-
-        $walletExists = $this->wallet->ifWalletIsLojista($request->payer);
-
-        if ($walletExists['type'] == 'lojista') return response()->json(['message' => "You can only receive transactions"], 422);
-     
-
-        $value = $request->value;
-        $payer = $this->wallet->getWallet($request->payer);
-        $payee = $this->wallet->getWallet($request->payee);
-
-        $payerCurrentBalance = $payer->current_balance;
-        $payeeCurrentBalance = $payee->current_balance;
-
-        if ($value > $payerCurrentBalance) {
-            return response()->json(['message' => "Higher value than expected"], 422);
-        } else if (($payerCurrentBalance - $value) < 0) {
-            return response()->json(['message' => "More than you have"], 422);
-        }
-
-        $payer->current_balance = ($payerCurrentBalance - $value);
-        $payee->current_balance = ($payeeCurrentBalance + $value);
-
-        $response = Http::get('https://run.mocky.io/v3/8fafdd68-a090-496f-8c9a-3442cf30dae6');
-
-        if ($response->failed()) {
-            $data = $request->all();
-            $data['status'] = 'rejected';
-            $response = Transfer::create($data);
-            return response()->json(['message' => $response], 422);
-        }
-
-        $payer->save();
-        $payee->save();
-        $data = $request->all();
-        $data['status'] = 'approved';
-        $response = Transfer::create($data);
-
+        $this->walletService->searchWallet($request, 'payer','Payer wallet invalid');
+        $this->walletService->searchWallet($request, 'payee','Payee wallet invalid');
+        $this->walletService->checkWalletLojista($request, 'payer');
+        $response = $this->transferService->transfer($request);
         return response()->json(['message' => $response], 201);
     }
 }

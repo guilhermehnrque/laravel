@@ -6,7 +6,6 @@ use App\Http\Requests\Wallet\WalletStoreRequest;
 use App\Http\Requests\Wallet\WalletUpdateRequest;
 use Illuminate\Http\Request;
 
-use App\Models\Wallet;
 use App\Services\WalletService;
 
 class WalletController extends Controller

@@ -19,7 +19,8 @@ class WalletRepository
         return $this->wallet->create($attributes);
     }
 
-    public function search(array $attributes, $id){
+    public function searchUserWallet(array $attributes, $id)
+    {
         try {
             return $this->wallet->where('id', $id)->where('user_id', $attributes['user_id'])->firstOrFail();
         } catch (\Exception $e) {
@@ -27,11 +28,34 @@ class WalletRepository
         }
     }
 
-    public function cash(array $attributes, $id){
+    public function cash(array $attributes, $id)
+    {
         $wallet_response = $this->wallet->find($id);
         $new_balance = $wallet_response->current_balance + $attributes['income'];
         $wallet_response->current_balance = $new_balance;
         $wallet_response->save();
         return $wallet_response;
     }
+
+    public function getWallet(array $attributes, $type, $message)
+    {
+        try {
+            return $this->wallet->where('id', $attributes[$type])->firstOrFail();
+        } catch (\Exception $e) {
+            throw new ModelNotFoundException($message);
+        }
+    }
+
+    public function getLojistaWallet(array $attributes, $type)
+    {
+
+        $wallet_response = $this->wallet->find($attributes[$type]);
+        $user = $wallet_response->user;
+
+        if($user['type'] == 'lojista'){
+            throw new ModelNotFoundException('You can only receive transactions');
+        }
+        return $user;
+    }
+
 }
