@@ -27,7 +27,10 @@ A escolha pela utilização do Laravel para a construção da API se deve a faci
 Na pasta raiz execute o comando `docker-compose up --build -d` para a construção do serviços do banco de dados, servidor web e o serviço php.
 
 
-Após acesse o diretório `brochini`, renomeie o arquivo `.env.example` para `.env`. As váriaveis de ambiente já estão configuradas mas ainda resta o `APP_KEY`, para isso executa o comando `php artisan key:generate` para criação da chave de aplicativo.
+Em seguida acesse o diretório do laravel `brochini` e instale o composer `docker-compose run --rm composer install`
+
+
+Em seguida renomeie o arquivo `.env.example` para `.env`. As váriaveis de ambiente já estão configuradas mas ainda resta o `APP_KEY`, para isso executa o comando `docker-compose run --rm artisan key:generate` para criação da chave de aplicativo.
 
 
 Para finalizar, execute o comando `docker-compose run --rm artisan migrate` para criação das tabelas no banco de dados.
