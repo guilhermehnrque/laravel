@@ -66,6 +66,6 @@ services:
         depends_on: 
             - mysql
         working_dir: /var/wwww/html
-        entrypoint: ['/var/www/html/artisan']
+        entrypoint: ['php','/var/www/html/artisan']
         networks: 
             - laravel
