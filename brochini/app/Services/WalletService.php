@@ -32,7 +32,7 @@ class WalletService
 
     public function searchWallet(Request $request, $type, $message)
     {
-        return $this->walletRepository->getWallet($request->all(), $type, $message);
+        return $this->walletRepository->getWalletTypeUser($request->all(), $type, $message);
     }
 
     public function checkWalletLojista(Request $request, $type)
@@ -40,5 +40,8 @@ class WalletService
         return $this->walletRepository->getLojistaWallet($request->all(), $type);
     }
 
+    public function getwallet($id){
+        return $this->walletRepository->getWallet($id);
+    }
 
 }

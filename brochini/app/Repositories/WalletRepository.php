@@ -37,7 +37,7 @@ class WalletRepository
         return $wallet_response;
     }
 
-    public function getWallet(array $attributes, $type, $message)
+    public function getWalletTypeUser(array $attributes, $type, $message)
     {
         try {
             return $this->wallet->where('id', $attributes[$type])->firstOrFail();
@@ -56,6 +56,11 @@ class WalletRepository
             throw new ModelNotFoundException('You can only receive transactions');
         }
         return $user;
+    }
+
+    public function getWallet($id){
+        $wallet_response = $this->wallet->find($id);
+        return $wallet_response['current_balance'];
     }
 
 }

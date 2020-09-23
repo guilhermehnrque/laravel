@@ -32,4 +32,10 @@ class WalletController extends Controller
         return response()->json(['message' => 'Income added', 'New balance' => $wallet_response ->current_balance], 201);
     }
 
+    public function show($id)
+    {
+        $wallet = $this->walletService->getwallet($id);
+        return response()->json(['message'=> 'Wallet found', 'current_balance' => $wallet]);
+    }
+
 }
