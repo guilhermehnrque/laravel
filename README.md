@@ -30,10 +30,10 @@ Na pasta raiz execute o comando `docker-compose up --build -d` para a construç�
 Em seguida acesse o diretório do laravel `brochini` e instale o composer `docker-compose run --rm composer install`
 
 
-Em seguida renomeie o arquivo `.env.example` para `.env`. As váriaveis de ambiente já estão configuradas mas ainda resta o `APP_KEY`, para isso executa o comando `docker-compose run --rm artisan key:generate` para criação da chave de aplicativo.
+Em seguida renomeie o arquivo `.env.example` para `.env`. As váriaveis de ambiente já estão configuradas mas ainda resta o `APP_KEY`, para isso execute o comando `docker-compose run --rm artisan key:generate` para criação da chave de aplicativo.
 
 
-Para finalizar, execute o comando `docker-compose run --rm artisan migrate` para criação das tabelas no banco de dados.
+Por finalizar, execute o comando `docker-compose run --rm artisan migrate` para criação das tabelas no banco de dados.
 
 ## Endpoints
 
