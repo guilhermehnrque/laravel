@@ -28,7 +28,7 @@ class UserController extends Controller
     {
         $validated = $request->validated();
         $response = $this->userService->register($request);
-        return response()->json(['message' => 'User created', 'use_code' => $response->id], 201);
+        return response()->json(['message' => 'User created', 'user_code' => $response->id], 201);
     }
 
     public function edit($id)

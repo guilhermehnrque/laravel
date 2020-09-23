@@ -18,6 +18,10 @@ Este repositório tem como propósito o desenvolvimento de uma API RESTful para 
 - Composer
 - Artisan
 
+## Motivação
+
+A escolha pela utilização do Laravel para a construção da API se deve a facilidade na utilização dos comandos Artisan e utilização do FormRequest para validação dos campos permitindo a criação de Controllers mais limpos.
+
 ## Instruções para execução
 
 Na pasta raiz execute o comando `docker-compose up --build -d` para a construção do serviços do banco de dados, servidor web e o serviço php.
